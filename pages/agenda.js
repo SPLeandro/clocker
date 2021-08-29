@@ -1,6 +1,8 @@
-export default function Agenda() {
-    return (
-      <div>agenda!</div>
-    )
-  }
+const Agenda = () => {
+  return (
+    <div>agenda!</div>
+  )
+}
+
+export default Agenda;
   
