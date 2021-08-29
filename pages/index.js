@@ -1,9 +1,10 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import Link  from 'next/link';
 
 import { 
   Container, Box, Input, Button, Text, 
-  FormControl, FormLabel, FormHelperText, InputLeftAddon, InputGroup 
+  FormControl, FormLabel, FormHelperText
 } from '@chakra-ui/react';
 
 import { Logo } from './../components';
@@ -11,7 +12,6 @@ import firebase from './../config/firebase';
 
 const validationSchema = yup.object().shape({
   email: yup.string().email('E-mail inválido').required('Preenchimento obrigatório'),
-  username: yup.string().required('Preenchimento obrigatório'),
   password: yup.string().required('Preenchimento obrigatório'),
   // website: yup.string().url(),
   // createdOn: yup.date().default(() => {return new Date()})
@@ -21,17 +21,16 @@ const validationSchema = yup.object().shape({
 export default function Home() {
 
   const {
-    values, errors, touched, isSubmitting, 
-    handleChange,handleBlur, handleSubmit} = 
-  useFormik({
-    onSubmit: (values, form) => {
-      console.log(values);
-      
+      values, errors, touched, isSubmitting, 
+      handleChange,handleBlur, handleSubmit
+    } = useFormik({
+    onSubmit: async (values, form) => { 
+      const user = await firebase.auth().signInWithEmailAndPassword(values.email, values.password);
+      console.log(user)
     },
     validationSchema,    
     initialValues: {
       email: '',
-      username: '',
       password: '',
     }
 
@@ -58,17 +57,11 @@ export default function Home() {
 
         </FormControl>
 
-        <FormControl id="username" p={4} isRequired >
-        <InputGroup size="lg">
-          <InputLeftAddon children="clocker.work"  />
-          <Input type="username" value={values.username} onChange={handleChange} onBlur={handleBlur} />
-          </InputGroup>
-          {touched.username && <FormHelperText textColor="#e74c3c">{errors.username}</FormHelperText>}
-        </FormControl>
-
         <Box p={4}>
           <Button colorScheme="blue" width="100%" onClick={handleSubmit} isLoading={isSubmitting}>Entrar</Button>
         </Box>
+
+        <Link href="/signup"> Ainda não tem uma conta? Cadastre-se</Link>
 
       </Box>      
     </Container>
