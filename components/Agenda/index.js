@@ -1,4 +1,4 @@
-import {firebaseClient} from '../../config/firebase';
+import {firebaseClient} from '../../config/firebase/client';
 import { Container, Button, Text } from "@chakra-ui/react";
 
 export const Agenda = () => {
