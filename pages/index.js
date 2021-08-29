@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 
 import { Logo } from './../components';
-import firebase from './../config/firebase';
+import firebase, { persistenceMode } from './../config/firebase';
 
 const validationSchema = yup.object().shape({
   email: yup.string().email('E-mail inválido').required('Preenchimento obrigatório'),
@@ -25,8 +25,15 @@ export default function Home() {
       handleChange,handleBlur, handleSubmit
     } = useFormik({
     onSubmit: async (values, form) => { 
-      const user = await firebase.auth().signInWithEmailAndPassword(values.email, values.password);
-      console.log(user)
+
+      firebase.auth().setPersistence(persistenceMode);
+
+      try {
+        const user = await firebase.auth().signInWithEmailAndPassword(values.email, values.password);
+        console.log(user);
+      } catch (error) {
+        console.log(error);
+      }
     },
     validationSchema,    
     initialValues: {
@@ -34,7 +41,7 @@ export default function Home() {
       password: '',
     }
 
-  })
+  });
 
   return (
     <Container p={4} centerContent>
