@@ -28,13 +28,14 @@ const signUp = async ({email, password, username}) => {
     const { data } = await axios({
       method: 'post',
       url: '/api/profile',
-      header: {
-        'Authentication': `Bearer ${auth.user.getToken()}` 
+      headers: {
+        // 'Authorization': `Bearer ${auth.user.getToken()}` 
+        'Authorization': `Bearer ` 
       },
-      data: {
-        username: username,
-      }
+      data: { username }
     });
+
+    console.log(data);
 
   } catch (error) {
     console.log('SignUp Error: ', error);
