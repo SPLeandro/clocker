@@ -26,10 +26,8 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(()=>{
-    if(auth){
-      router.push('/agenda');
-    }
-  },[auth])
+    auth.user && router.push('/agenda');
+  },[auth.user])
 
   const {
       values, errors, touched, isSubmitting, 
