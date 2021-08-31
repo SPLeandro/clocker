@@ -37,6 +37,8 @@ const signUp = async ({email, password, username}) => {
       data: { username }
     });
 
+    console.log(data);
+
   } catch (error) {
     console.log('SignUp Error: ', error);
   }
