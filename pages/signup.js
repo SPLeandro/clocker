@@ -73,7 +73,7 @@ export default function Home() {
         </FormControl>
 
         <Box p={4}>
-          <Button colorScheme="blue" width="100%" onClick={handleSubmit} isLoading={isSubmitting}>Entrar</Button>
+          <Button colorScheme="blue" width="100%" onClick={handleSubmit} isLoading={isSubmitting}>Cadastrar</Button>
         </Box>
       </Box>  
          

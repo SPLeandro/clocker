@@ -9,6 +9,8 @@ const signIn = async ({email, password}) => {
 
     try {
       await firebaseClient.auth().signInWithEmailAndPassword(email, password);
+      return firebaseClient.auth().currentUser;
+      
     } catch (error) {
       console.log('SignIn error:', error);
     }
@@ -22,20 +24,18 @@ const signOut = async () => {
 const signUp = async ({email, password, username}) => {
   try {
     await firebaseClient.auth().createUserWithEmailAndPassword(email, password);
-    await signIn({email, password});
-    // setupProfile({token, username});
-
+    const user = await signIn({email, password});
+      
+    const token = await user.getIdToken();
+    
     const { data } = await axios({
       method: 'post',
       url: '/api/profile',
       headers: {
-        // 'Authorization': `Bearer ${auth.user.getToken()}` 
-        'Authorization': `Bearer ` 
+        'Authorization': `Bearer ${token}` 
       },
       data: { username }
     });
-
-    console.log(data);
 
   } catch (error) {
     console.log('SignUp Error: ', error);
