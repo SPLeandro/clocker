@@ -8,15 +8,20 @@ import { useFetch, useStateRx } from '@refetty/react';
 import axios from 'axios';
 
 import { useAuth, Logo, formatDate } from '../components';
+import { getToken } from "../config/firebase/client";
 
-const getAgenda = (when) => axios({
-  method: 'get',
-  url: '/api/agenda',
-  params: { when },
-  headers:{
-    Authorization: `Bearer ${'123'}`
-  }
-});
+const getAgenda = async (when) => { 
+  const token = await getToken();
+
+  return axios({
+    method: 'get',
+    url: '/api/agenda',
+    params: { when },
+    headers:{
+      Authorization: `Bearer ${token}`
+    }
+  })
+};
 
 const Header = ({children}) =>(
   <Box p={4} display="flex" alignItems="center" justifyContent="space-between">
@@ -31,7 +36,7 @@ export default function Agenda () {
   const {auth, signOut} = useAuth();
   const [when, setWhen] = useState(() => new Date());
  
-  const [data, {loading, status, error }, fetch] = useFetch(sgetAgenda, {lazy: true});
+  const [data, {loading, status, error }, fetch] = useFetch(getAgenda, {lazy: true});
 
   const addDay = () => setWhen(prevState => addDays(prevState, 1));
 
