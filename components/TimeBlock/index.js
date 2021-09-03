@@ -10,6 +10,16 @@ import {
 } from "@chakra-ui/react";
 
 import {Input} from '../Input';
+import axios from "axios";
+
+const setSchedule = async (data) => axios({
+    method: 'post',
+    url: '/api/schedule',
+    data: { 
+        ...data, 
+        username: window.location.pathname.replace('/',''),
+    }
+})
 
 const ModalTimeBlock = ({isOpen, onClose, onComplete, children}) => (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -34,10 +44,10 @@ export const TimeBlock = ({time}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const {values, handleSubmit, handleChange, handleBlur , errors, touched} = useFormik({
-        onSubmit: () => {},
+        onSubmit: (values) => setSchedule({ ...values, when: time }),
         initialValues: {
             name: '',
-            phone: ''
+            phone: '',
         },
         validationSchema: yup.object().shape({
             name: yup.string().required('Preenchimento obrigatório'),

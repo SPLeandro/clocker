@@ -16,9 +16,41 @@ for (let blockIndex = 0; blockIndex <= totalHours; blockIndex++){
     timeBlocks.push(time);
 } 
 
+const getUserId = async (username) => {
+    const profileDoc = await profile
+        .where('username', '==', username)
+        .get()
 
+    const { userId } = profileDoc.docs[0]?.data();
+    return userId;
+}
 
-export default async (req, res) => {
+const setSchedule = async (req, res ) => {
+
+    const { username, when, name, phone } = req.body;
+
+    const userId = await getUserId(username);
+    const doc = await agenda.doc(`${userId}#${when}`).get(); 
+
+    if(doc.exists){
+        return res.status(400);
+    }
+
+    try {
+        await agenda.doc(`${userId}#${when}`).set({
+            userId,
+            when,
+            name,
+            phone,
+        });
+
+        return res.status(200);
+    } catch (error){
+        res.status(400).send(error);
+    }
+}
+
+const getSchedule = (req, res ) => {
     try {
         // const profileDoc = await profile
         // .where('username', '==', req.query.username)
@@ -35,4 +67,13 @@ export default async (req, res) => {
         console.log(error);
         return res.status(401);
     }
-}   
+}
+
+const methods = {
+    POST: setSchedule,
+    GET: getSchedule,
+}
+
+export default async (req, res) => methods[req.method]
+    ? methods[req.method](req,res) 
+    : res.status(405);

@@ -10,9 +10,9 @@ import axios from 'axios';
 import { formatDate, useAuth, Logo, TimeBlock } from '../components';
 
 const getSchedule = async (when) => axios({
-method: 'get',
-url: '/api/schedule',
-params: { when, username: window.location.pathname },
+  method: 'get',
+  url: '/api/schedule',
+  // params: { when, username: window.location.pathname },
 })
 
 const Header = ({children}) =>(

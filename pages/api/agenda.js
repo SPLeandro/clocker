@@ -15,7 +15,7 @@ export default async (req, res) => {
         const snapshot = await agenda
         .where('userId', '==', user_id)
         .where('when', '==', req.query.when)
-        .get()
+        .get();
 
         return res.status(200).json(snapshot.docs);
     } catch (error){
