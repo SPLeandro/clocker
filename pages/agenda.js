@@ -65,7 +65,7 @@ export default function Agenda () {
   }, [when]);
 
   return (
-    <Container p={4}>
+    <Container p={4} height="100vh" justifyContent="center">
       <Header>
         <Logo size={180}/>
         <Button onClick={signOut}>Sair</Button>

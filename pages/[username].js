@@ -19,7 +19,7 @@ const getSchedule = async ({when, username}) => axios({
 })
 
 const Header = ({children}) =>(
-  <Box p={4} display="flex" alignItems="center" justifyContent="space-between">
+  <Box p={4} display="flex" alignItems="center" justifyContent="center">
     {children}
   </Box>
 )
@@ -44,7 +44,7 @@ export default function Schedule () {
   }, [when, router.query.username]);
 
   return (
-    <Container p={4}>
+    <Container p={4} height="100vh" justifyContent="center">
       <Header>
         <Logo size={180}/>
       </Header>

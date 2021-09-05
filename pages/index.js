@@ -18,7 +18,7 @@ export default function Home(){
   },[auth])
 
   return (
-    <Container p={4} centerContent>
+    <Container p={4} centerContent height="100vh" justifyContent="center">
       <Spinner />
     </Container>
   )  

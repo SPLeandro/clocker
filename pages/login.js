@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import Link  from 'next/link';
+import NextLink  from 'next/link';
 import {useRouter} from 'next/router';
 
 import { 
-  Container, Box, Input, Button, Text, 
+  Container, Box, Input, Button, Text, Link, 
   FormControl, FormLabel, FormHelperText
 } from '@chakra-ui/react';
 
@@ -40,7 +40,7 @@ export default function Login () {
 
 
   return (
-    <Container p={4} centerContent>
+    <Container p={4} centerContent height="100vh" justifyContent="center">
       <Logo size={200}/>
       <Box p={4} mt={8}>
         <Text>Crie sua agenda compartilhada</Text>
@@ -64,7 +64,12 @@ export default function Login () {
           <Button colorScheme="blue" width="100%" onClick={handleSubmit} isLoading={isSubmitting}>Entrar</Button>
         </Box>
 
-        <Link href="/signup"> Ainda não tem uma conta? Cadastre-se</Link>
+        <Text> 
+          Ainda não tem uma conta? 
+          <NextLink href="/signup"> 
+            <Link ml={1} color="blue.500">Cadastre-se </Link>
+          </NextLink>
+        </Text>
 
       </Box>      
     </Container>

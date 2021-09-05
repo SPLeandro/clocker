@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 
 import { 
-  Container, Box, Input, Button, Text, 
+  Container, Box, Input, Button, Text, Link,
   FormControl, FormLabel, FormHelperText, InputLeftAddon, InputGroup 
 } from '@chakra-ui/react';
 
@@ -44,7 +44,7 @@ export default function Home() {
   })
 
   return (
-    <Container p={4} centerContent>
+    <Container p={4} centerContent height="100vh" justifyContent="center">
       <Logo size={200}/>
       <Box p={4} mt={8}>
         <Text>Crie sua agenda compartilhada</Text>
@@ -77,7 +77,12 @@ export default function Home() {
         </Box>
       </Box>  
          
-      <Link href="/"> Já possui uma conta? Faça Login</Link> 
+      <Text> 
+        Já possui uma conta?
+        <NextLink href="/"> 
+          <Link ml={1} color="blue.500">Faça Login</Link>
+        </NextLink>
+      </Text>
     </Container>
   )
 }
