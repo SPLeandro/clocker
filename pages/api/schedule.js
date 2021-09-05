@@ -7,13 +7,13 @@ const agenda = db.collection('agenda');
 
 const startAt = new Date(2021, 1, 1, 8, 0);
 const endAt = new Date(2021, 1, 1, 17, 0);
-const timeBlocks = [];
+const timesBlockList = [];
 
 const totalHours = differenceInHours(endAt, startAt);
 
 for (let blockIndex = 0; blockIndex <= totalHours; blockIndex++){
     const time = format(addHours(startAt, blockIndex), 'HH:mm');
-    timeBlocks.push(time);
+    timesBlockList.push(time);
 } 
 
 const getUserId = async (username) => {
@@ -53,11 +53,22 @@ const setSchedule = async (req, res ) => {
     }
 }
 
-const getSchedule = (req, res ) => {
+const getSchedule = async (req, res ) => {
     try {
-        // const profileDoc = await profile
-        // .where('username', '==', req.query.username)
-        // .get();
+        const { username, date } = req.query;
+        const userId = await getUserId(username);
+
+        const snapshot = await agenda 
+            .where('userId', '==', userId)
+            .where('date', '==', date)
+            .get();     
+
+        const docs = snapshot.docs.map(doc => doc.data());
+
+        const result = timesBlockList.map(time => ({
+            time,
+            isBlocked: !!docs.find(doc => doc.time === time)
+        }))
 
 
         // const snapshot = await agenda
@@ -65,7 +76,7 @@ const getSchedule = (req, res ) => {
         // .where('when', '==', req.query.when)
         // .get()
 
-        return res.status(200).json(timeBlocks);
+        return res.status(200).json(result);
     } catch (error){
         console.log(error);
         return res.status(401);

@@ -42,7 +42,7 @@ const ModalTimeBlock = ({isOpen, onClose, onComplete, isSubmitting, children}) =
     </Modal>
 )
 
-export const TimeBlock = ({time, date}) => {
+export const TimeBlock = ({time, date, disabled}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const {values, handleSubmit, handleChange, handleBlur , errors, touched, isSubmitting} = useFormik({
@@ -68,31 +68,33 @@ export const TimeBlock = ({time, date}) => {
     const toggle = () => setIsOpen(prevState => !prevState);
 
     return (
-        <Button p={8} bg="blue.500" color="#fff" onClick={toggle}>
+        <Button p={8} bg="blue.500" color="#fff" onClick={toggle} disabled={disabled}>
             {time}
-            <ModalTimeBlock 
-                isSubmitting={isSubmitting} 
-                isOpen={isOpen} 
-                onClose={toggle} 
-                onComplete={handleSubmit}
-            >
-                <>
-                    <Input 
-                        name="name" label="Nome:" placeholder="Insira seu nome" 
-                        value={values.name} onChange={handleChange} onBlur={handleBlur}
-                        error={errors.name} touched={touched.name}
-                        size="lg"  
-                        disabled={isSubmitting}
-                    />
-                    <Input 
-                        name="phone" label="Telefone:" placeholder="(XX) X XXXX-XXXX"
-                        value={values.phone} onChange={handleChange}  
-                        error={errors.phone}
-                        size="lg"  mt={4} 
-                        disabled={isSubmitting}
-                    />
-                </>
-            </ModalTimeBlock>
+            {!disabled &&
+                <ModalTimeBlock 
+                    isSubmitting={isSubmitting} 
+                    isOpen={isOpen} 
+                    onClose={toggle} 
+                    onComplete={handleSubmit}
+                >
+                    <>
+                        <Input 
+                            name="name" label="Nome:" placeholder="Insira seu nome" 
+                            value={values.name} onChange={handleChange} onBlur={handleBlur}
+                            error={errors.name} touched={touched.name}
+                            size="lg"  
+                            disabled={isSubmitting}
+                        />
+                        <Input 
+                            name="phone" label="Telefone:" placeholder="(XX) X XXXX-XXXX"
+                            value={values.phone} onChange={handleChange}  
+                            error={errors.phone}
+                            size="lg"  mt={4} 
+                            disabled={isSubmitting}
+                        />
+                    </>
+                </ModalTimeBlock>
+            }
         </Button>
     )
 }
