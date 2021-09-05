@@ -21,6 +21,10 @@ const getUserId = async (username) => {
         .where('username', '==', username)
         .get()
 
+    if (!profileDoc.docs.length){
+        return false;
+    }
+
     const { userId } = profileDoc.docs[0]?.data();
     return userId;
 }
@@ -58,6 +62,10 @@ const getSchedule = async (req, res ) => {
         const { username, date } = req.query;
         const userId = await getUserId(username);
 
+        if(!userId){
+            return res.status(404).json({message: 'Invalid username'}); 
+        }
+
         const snapshot = await agenda 
             .where('userId', '==', userId)
             .where('date', '==', date)
@@ -69,12 +77,6 @@ const getSchedule = async (req, res ) => {
             time,
             isBlocked: !!docs.find(doc => doc.time === time)
         }))
-
-
-        // const snapshot = await agenda
-        // .where('userId', '==', profileDoc.userId)
-        // .where('when', '==', req.query.when)
-        // .get()
 
         return res.status(200).json(result);
     } catch (error){
