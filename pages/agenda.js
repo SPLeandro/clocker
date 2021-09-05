@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Container, Button, IconButton, Box, Text } from "@chakra-ui/react";
+import { Container, Button, IconButton, Box, Text, Spinner } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router'
-import { addDays, subDays } from "date-fns";
+import { addDays, subDays, format } from "date-fns";
 
-import { useFetch, useStateRx } from '@refetty/react';
+import { useFetch } from '@refetty/react';
 import axios from 'axios';
 
 import { useAuth, Logo, formatDate } from '../components';
@@ -16,9 +16,10 @@ const getAgenda = async (when) => {
   return axios({
     method: 'get',
     url: '/api/agenda',
-    params: { when },
+    params: { date: format(when, 'yyyy-MM-dd'),  },
     headers:{
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
+      
     }
   })
 };
@@ -26,6 +27,20 @@ const getAgenda = async (when) => {
 const Header = ({children}) =>(
   <Box p={4} display="flex" alignItems="center" justifyContent="space-between">
     {children}
+  </Box>
+)
+
+const AgendaBlock = ({time, name, phone, ...props}) => (
+  <Box {...props} display="flex" bg="gray.100" borderRadius={8} p={4} alignItems="center">
+    <Box flex={1}>
+      <Text fontSize="2xl">
+        {time}
+      </Text>
+    </Box>
+    <Box textAlign="right">
+      <Text fontSize="2xl">{name}</Text>
+      <Text>{phone}</Text>
+    </Box>
   </Box>
 )
 
@@ -39,7 +54,6 @@ export default function Agenda () {
   const [data, {loading, status, error }, fetch] = useFetch(getAgenda, {lazy: true});
 
   const addDay = () => setWhen(prevState => addDays(prevState, 1));
-
   const removeDay = () => setWhen(prevState => subDays(prevState, 1));
   
   useEffect(()=>{
@@ -62,6 +76,13 @@ export default function Agenda () {
           <Text flex={1} textAlign="center">{formatDate(when, 'PPPP')}</Text>
         <IconButton icon={<ChevronRightIcon />} bg="transparent" onClick={addDay} />
       </Box>      
+
+      {loading && <Spinner tickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />}
+      
+      {data?.map( doc => (
+        <AgendaBlock key={doc.time} time={doc.time} name={doc.name} phone={doc.phone} mt={4} />
+      ))}
+  
     </Container>
   )
 }

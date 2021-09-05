@@ -42,7 +42,7 @@ const ModalTimeBlock = ({isOpen, onClose, onComplete, isSubmitting, children}) =
     </Modal>
 )
 
-export const TimeBlock = ({time, date, disabled}) => {
+export const TimeBlock = ({time, date, disabled, onSuccess}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const {values, handleSubmit, handleChange, handleBlur , errors, touched, isSubmitting} = useFormik({
@@ -50,6 +50,7 @@ export const TimeBlock = ({time, date, disabled}) => {
             try {
                 await setSchedule({ ...values, time, date });
                 toggle();
+                onSuccess();
             } catch (error) {
                 console.log(error);
                 toggle();
