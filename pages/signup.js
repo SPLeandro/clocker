@@ -9,7 +9,8 @@ import {
   FormControl, FormLabel, FormHelperText, InputLeftAddon, InputGroup 
 } from '@chakra-ui/react';
 
-import { Logo, useAuth } from '../components';
+import { Logo } from '../components';
+import { useAuth } from '../providers';
 
 const validationSchema = yup.object().shape({
   email: yup.string().email('E-mail inválido').required('Preenchimento obrigatório'),

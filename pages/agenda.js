@@ -7,7 +7,8 @@ import { addDays, subDays, format } from "date-fns";
 import { useFetch } from '@refetty/react';
 import axios from 'axios';
 
-import { useAuth, Logo, formatDate } from '../components';
+import { Logo, formatDate } from '../components';
+import {useAuth } from '../providers';
 import { getToken } from "../config/firebase/client";
 
 const getAgenda = async (when) => { 

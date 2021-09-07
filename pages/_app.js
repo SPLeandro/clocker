@@ -1,5 +1,5 @@
 import {ChakraProvider} from '@chakra-ui/react';
-import {AuthProvider} from '../components/Auth';
+import {AuthProvider} from '../providers';
 
 import {Footer} from '../components';
 import {Flex} from '@chakra-ui/react';
