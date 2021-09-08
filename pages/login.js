@@ -5,7 +5,7 @@ import NextLink  from 'next/link';
 import {useRouter} from 'next/router';
 
 import { 
-  Container, Box, Input, Button, Text, Link, 
+  Container, Box, Input, Button, Text, Link, useToast,
   FormControl, FormLabel, FormHelperText
 } from '@chakra-ui/react';
 
@@ -21,23 +21,57 @@ export default function Login () {
 
   const {auth, signIn} = useAuth();
   const router = useRouter();
+  const toast = useToast();
 
   const {
-      values, errors, touched, isSubmitting, 
-      handleChange,handleBlur, handleSubmit
-    } = useFormik({
-      onSubmit: signIn,
-      validationSchema,    
-      initialValues: {
-        email: '',
-        password: '',
-      },
+    values, errors, touched, isSubmitting, 
+    handleChange,handleBlur, handleSubmit
+  } = useFormik({
+    onSubmit: async (data) => {
+      try {
+        const response = await signIn(data);
+        toast.closeAll();
+
+        if (response.error) {
+          toast({
+            title: response.error.code,
+            description: response.error.message,
+            status: 'error',
+            duration: 10000,
+            isClosable: true,
+            position: 'top',
+          });
+        }
+
+        if (response.user){
+          toast({
+            title: `Bem-Vindo!`,
+            description: 'Autenticação realizada com sucesso.',
+            status: 'success',
+            duration: 3000,
+            position: 'top',
+          });
+        }
+      } catch (error) {
+        toast({
+          title: 'Houve um problema!',
+          description: error,
+          status: 'error',
+          duration: 10000,
+          position: 'top',
+        });
+      }
+    },
+    validationSchema,    
+    initialValues: {
+      email: '',
+      password: '',
+    },
   });
 
   useEffect(()=>{
     auth.user && router.push('/agenda');
-  },[auth.user])
-
+  },[auth.user]);
 
   return (
     <Container p={4} centerContent height="100vh" justifyContent="center">
@@ -73,5 +107,5 @@ export default function Login () {
 
       </Box>      
     </Container>
-  )
+  );
 }

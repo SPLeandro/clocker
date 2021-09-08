@@ -5,7 +5,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 
 import { 
-  Container, Box, Input, Button, Text, Link,
+  Container, Box, Input, Button, Text, Link, useToast,
   FormControl, FormLabel, FormHelperText, InputLeftAddon, InputGroup 
 } from '@chakra-ui/react';
 
@@ -16,33 +16,65 @@ const validationSchema = yup.object().shape({
   email: yup.string().email('E-mail inválido').required('Preenchimento obrigatório'),
   username: yup.string().required('Preenchimento obrigatório'),
   password: yup.string().required('Preenchimento obrigatório'),
-  // website: yup.string().url(),
-  // createdOn: yup.date().default(() => {return new Date()})
 });
-
 
 export default function Home() {
 
   const {auth, signUp} = useAuth();
   const router = useRouter();
+  const toast = useToast();
 
   useEffect(()=>{
     auth.user && router.push('/agenda');
-  },[auth.user])
+  },[auth.user]);
 
   const {
-      values, errors, touched, isSubmitting, 
-      handleChange,handleBlur, handleSubmit
-    } = useFormik({
-    onSubmit: signUp,
+    values, errors, touched, isSubmitting, 
+    handleChange,handleBlur, handleSubmit
+  } = useFormik({
+    onSubmit: async (data) => {
+      try {
+        const response = await signUp(data);
+        toast.closeAll();
+        
+        if(response.error){
+          toast({
+            title: response.error.code,
+            description: response.error.message,
+            status: 'error',
+            duration: 10000,
+            isClosable: true,
+            position: 'top',
+          });
+        }
+
+        if(response.user){
+          toast({
+            title: `Bem vindo, ${response.user.username}!`,
+            description: `Seu cadastro com o email ${response.user.email} foi realizado com sucesso.`,
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+            position: 'top',
+          });
+        }
+      } catch (error) {
+        toast({
+          title: 'Houve um problema!',
+          description: error,
+          status: 'error',
+          duration: 10000,
+          position: 'top',
+        });
+      }
+    },
     validationSchema,    
     initialValues: {
       email: '',
       username: '',
       password: '',
     }
-
-  })
+  });
 
   return (
     <Container p={4} centerContent height="100vh" justifyContent="center">
@@ -85,5 +117,5 @@ export default function Home() {
         </NextLink>
       </Text>
     </Container>
-  )
+  );
 }
