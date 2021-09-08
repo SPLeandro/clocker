@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react"
 import { firebaseClient, persistenceMode } from "../../config/firebase/client";
 import axios from 'axios';
+import { id } from "date-fns/locale";
 
 const AuthContext = createContext([{}, ()=>{}]);
 
@@ -30,6 +31,19 @@ export const AuthProvider = ({children}) => {
   
   const signUp = async ({email, password, username}) => {
     try {
+      //VERIFY IF USERNAME EXISTS
+      try {
+        await axios({
+          method: 'get',
+          url: '/api/profile/',
+          params: {
+            username
+          },
+        });
+      } catch (error){
+        throw {...error.response.data.error};
+      }    
+
       await firebaseClient.auth().createUserWithEmailAndPassword(email, password);
       const { user } = await signIn({email, password});
         
