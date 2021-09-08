@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Container, IconButton, Box, Text, SimpleGrid, Spinner} from "@chakra-ui/react";
+import { Container, IconButton, Box, Flex, Text, SimpleGrid, Spinner} from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router'
 import { addDays, subDays, format } from "date-fns";
@@ -44,7 +44,7 @@ export default function Schedule () {
   }, [when, router.query.username]);
 
   return (
-    <Container p={4} height="100vh" justifyContent="center">
+    <Container p={4} flex="1" justifyContent="center">
       <Header>
         <Logo size={180}/>
       </Header>
@@ -55,9 +55,14 @@ export default function Schedule () {
         <IconButton icon={<ChevronRightIcon />} bg="transparent" onClick={addDay} />
       </Box>   
 
+      {loading && 
+        <Flex justifyContent="center" mt={4}>
+          <Spinner tickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+        </Flex>
+      }  
+
       <SimpleGrid p={4} columns={2} spacing={4}>
-          {loading && <Spinner tickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />}
-          {data?.map(({time, isBlocked})=> <TimeBlock key={time} time={time} date={when} disabled={isBlocked} onSuccess={refresh}/>)}
+        {data?.map(({time, isBlocked})=> <TimeBlock key={time} time={time} date={when} disabled={isBlocked} onSuccess={refresh}/>)}
       </SimpleGrid>
 
     </Container>

@@ -74,7 +74,7 @@ export default function Login () {
   },[auth.user]);
 
   return (
-    <Container p={4} centerContent height="100vh" justifyContent="center">
+    <Container p={4} flex="1" centerContent justifyContent="center">
       <Logo size={200}/>
       <Box p={4} mt={8}>
         <Text>Crie sua agenda compartilhada</Text>

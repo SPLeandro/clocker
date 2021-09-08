@@ -1,4 +1,4 @@
-import {Container, Box, Spacer, Divider, Text, Button, Link} from '@chakra-ui/react';
+import {Container, Box, Divider, Text, Button, Link} from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 export const Footer =  (props) => {

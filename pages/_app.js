@@ -6,7 +6,7 @@ import {Flex} from '@chakra-ui/react';
 
 const ScreenComponent = ({Component, pageProps, Footer}) => {
   return (
-    <Flex direction="column" h="100vh">
+    <Flex direction="column" minH="100vh">
       <Component {...pageProps} />
       <Footer />
     </Flex>
