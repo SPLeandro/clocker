@@ -10,8 +10,8 @@ export const Footer =  (props) => {
                 <Text fontSize="md">Developed by Leandro Santos</Text>
                 
                 <Button variant="link" fontSize="sm" textAlign="center">
-                    <Link href="https://github.com/SPLeandro" isExternal display="flex" alignItems="center">
-                        github.com/SPLeandro 
+                    <Link href="https://github.com/psleandro" isExternal display="flex" alignItems="center">
+                        github.com/psleandro 
                         <ExternalLinkIcon mx="2px" />
                     </Link>
                 </Button>
